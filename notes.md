@@ -37,7 +37,7 @@ Further important capabilities:
 
 https://learn.deeplearning.ai/courses/ai-agents-in-langgraph/lesson/2/build-an-agent-from-scratch
 * useful to notice what jobs fall to the LLM and what jobs fall to the code around the LLM, the **runtime**
-* code example [[Lesson_1_Student.py|Lesson_1_Student.py]], based on https://til.simonwillison.net/llms/python-react-pattern
+* code example [Lesson_1_Student.py](src/Lesson_1_Student.py), based on https://til.simonwillison.net/llms/python-react-pattern
 
 ### 3 LangGraph Components
 
@@ -87,7 +87,7 @@ Our ReAct example (from `Lesson_1_Student.py`):
 <img src="attachments/LangGraph_ReAct_example.png" width="400">
 Node "llm" calls OpenAI LLM, node "action" executes the action the LLM chose, if it chose one.
 
-Code example: [[Lesson_2_Student.py|Lesson_2_Student.py]]
+Code example: [Lesson_2_Student.py](src/Lesson_2_Student.py)
 
 Output of `Image(abot.graph.get_graph().draw_png())`:
 ![LangGraph_getGraphDrawPNG.png](attachments/LangGraph_getGraphDrawPNG.png)
@@ -118,7 +118,7 @@ Example of a basic search tool implementation:
 
 #### 4.3 How to use it?
 
-Code example: [[Lesson_3_Student.py|Lesson_3_Student.py]]
+Code example: [Lesson_3_Student.py](src/Lesson_3_Student.py)
 
 Tavily yields:
 ```json file:tavily_result.json
@@ -186,8 +186,8 @@ These are really powerful for building production applications:
 * so that your agents are able to have multiple conversations with multiple users at the same time
 * have a concept of memory so that your agents can resume those conversations.
 
-Code example: [[Lesson_4_Student.py|Lesson_4_Student.py]]
-* based upon [[Lesson_2_Student.py|Lesson_2_Student.py]]
+Code example: [Lesson_4_Student.py](src/Lesson_4_Student.py)
+* based upon [Lesson_2_Student.py](src/Lesson_2_Student.py)
 * adds a **checkpointer**
 	* checkpoints the LangGraph state (we only have `messages: Annotated[list[AnyMessage], operator.add]`) after and between every node
 	* we will use `SqliteSaver`
@@ -223,8 +223,8 @@ New LangGraph version has a couple of key additions:
 - Additional state information is stored to memory and displayed when using `get_state()` or `get_state_history()`.
 - State is additionally stored every state transition while previously it was stored at an interrupt or at the end. These change the command output slightly, but are a useful addition to the information available.
 
-Code example: [[Lesson_5_Student.py|Lesson_5_Student.py]]
-* based upon [[Lesson_4_Student.py|Lesson_4_Student.py]]
+Code example: [Lesson_5_Student.py](src/Lesson_5_Student.py)
+* based upon [Lesson_4_Student.py](src/Lesson_4_Student.py)
 * for human in the loop interactions, we want to replace existing messages
 	* do this with a custom reduce messages function `reduce_messages` that looks for messages with the same ID, and if it sees that you are inserting one with the same ID as one that already exists, it replaces that. Otherwise, appending as before.
 	* If a message (this is the case for `HumanMessage`s) does not yet contain an id, add one
@@ -255,21 +255,21 @@ as opposed to
 #### 5.2 Modify state
 * you can modify that state snapshot `state1` to `state1m` and then call `graph.update_state({"thread_id": "42"}, state1m)` to store it back on top, as new current state. When you then run `stream` or `invoke`, `state1m` will be used as its starting point:
 <img src="attachments/LangGraph_UpdateState.png" width="500">
-Code example [[Lesson_5_Student.py|Lesson_5_Student.py]] at `# Modify State:` shows how to modify the state of the graph in order to control what the agent does (report weather in Louisiana instead of LA).
+Code example [Lesson_5_Student.py](src/Lesson_5_Student.py) at `# Modify State:` shows how to modify the state of the graph in order to control what the agent does (report weather in Louisiana instead of LA).
 #### 5.3 Time Travel
 
 See State Memory images above: 
 * We are keeping a running list of all these state. When we modified a state, we created a new state. When we update the graph, the new state is ADDED. 
 * This allows us to go back and visit previous states. This is called **time travel**.
 
-Code example [[Lesson_5_Student.py|Lesson_5_Student.py]] at `# Time Travel:` shows how to time travel by
+Code example [Lesson_5_Student.py](src/Lesson_5_Student.py) at `# Time Travel:` shows how to time travel by
 1. store the states in an list
 2. pick the state `to_replay` before action, i.e. before tool calling
 3. call `graph.stream(None, to_replay.config)`
 
 #### 5.4 Go back in time and edit
 
-Mix of time travel and modify state, see code example [[Lesson_5_Student.py|Lesson_5_Student.py]] at `# Go back in time and edit:` shows how to travel back to a previous, but edited state:
+Mix of time travel and modify state, see code example [Lesson_5_Student.py](src/Lesson_5_Student.py) at `# Go back in time and edit:` shows how to travel back to a previous, but edited state:
 1. pick `to_replay` again
 2. modify it as in [[Deeplearning course ai-agents-in-langgraph#5.2 Modify state]]
 3. branch of into `branch_state` with `branch_state = abot.graph.update_state(to_replay.config, to_replay.values)`
@@ -277,7 +277,7 @@ Mix of time travel and modify state, see code example [[Lesson_5_Student.py|Less
 
 #### 5.5 Add message to a state at a given time
 
-Instead of calling Tavily, we want to mock a response by appending a new message into the state, see code example [[Lesson_5_Student.py|Lesson_5_Student.py]] at `# Add message to a state at a given time:` shows how to:
+Instead of calling Tavily, we want to mock a response by appending a new message into the state, see code example [Lesson_5_Student.py](src/Lesson_5_Student.py) at `# Add message to a state at a given time:` shows how to:
 1. get the `tool_call_id` that is expected from the next tool call, from `to_replay`
 2. create a new message `sate_update`
 3. update the state in the graph via `graph.update_state(to_replay.config, state_update, as_node="action")`. 
@@ -335,7 +335,7 @@ Essay Writer is a compact version of an AI researcher:
 * `revision_number` keeps track of the number of revisions we have made
 * `max_revisions` is used for the exit criterion.
 
-See code example [[Lesson_6_Student.py|Lesson_6_Student.py]]:
+See code example [Lesson_6_Student.py](src/Lesson_6_Student.py):
 <img src="attachments/LangGraph_EssayWriter_Graph_a.png" width="300">
 <img src="attachments/LangGraph_EssayWriter_Graph_b.png" width="300">
 
