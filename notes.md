@@ -27,7 +27,7 @@ https://learn.deeplearning.ai/courses/ai-agents-in-langgraph/lesson/1/introducti
 	* Function calling 
 	* Tool execution
 	* LangGraph: supports cyclic graphs, which are necessary for many successful patterns
-![[LangGraph_exemplaryWorkflows.png|999]]
+<img src="attachments/LangGraph_exemplaryWorkflows.png" width="999">
 Further important capabilities:
 * agentic search
 * human input: to guide an agent at critical points
@@ -42,24 +42,24 @@ https://learn.deeplearning.ai/courses/ai-agents-in-langgraph/lesson/2/build-an-a
 ### 3 LangGraph Components
 
 Last lesson:
-![[Lesson_1_Student_overview.png|800]]
+<img src="attachments/Lesson_1_Student_overview.png" width="800">
 
 Break this down into LangChain components:
 #### 3.1 LangChain Prompts
 
-![[LangChainPrompts.png|500]]
+<img src="attachments/LangChainPrompts.png" width="500">
 
-![[LangChainPromptExample_ReAct.png|500]]
-![[LangChainPromptExample_ReAct_Part2.png|500]]
+<img src="attachments/LangChainPromptExample_ReAct.png" width="500">
+<img src="attachments/LangChainPromptExample_ReAct_Part2.png" width="500">
 where `agent_scratchpad` contains all the actions and observations.
 More prompts, contributed by users, in the prompt hub.
 #### 3.2 LangChain Tools
 
-![[LangChainTools_Tavily.png|500]]
+<img src="attachments/LangChainTools_Tavily.png" width="500">
 LangChain community package contains hundreds of other tools.
 #### 3.3 LangGraph
 
-![[LangGraph.png|500]]
+<img src="attachments/LangGraph.png" width="500">
 
 **LangGraph** 
 * lets you describe and orchestrate control flow, such as loops (cyclic graphs). See [[LangGraph_exemplaryWorkflows.png]] above: those workflows are all cyclic graphs.
@@ -71,7 +71,7 @@ LangGraph core concepts:
 * **nodes**: agents or functions
 * **edges**: connect nodes
 * **conditional edges**: decisions
-![[LangGraph_CoreConcepts.png|300]]
+<img src="attachments/LangGraph_CoreConcepts.png" width="300">
 
 Comes with built-in **persistence**: 
 * for having multiple conversations at the same time
@@ -79,24 +79,24 @@ Comes with built-in **persistence**:
 * enables cool human-in-the-loop features
 
 **Agent state**:
-![[LangGraph_AgentState.png|600]]
+<img src="attachments/LangGraph_AgentState.png" width="600">
 Annotation with `operator.add`: when the state is updated with new messages, the new messages do not override the old ones, but are added (otherwise, when a new state is pushed to that variable, the old value is overridden.)
 ? Why can agent_outcome be `None`?
 
 Our ReAct example (from `Lesson_1_Student.py`):
-![[LangGraph_ReAct_example.png|400]]
+<img src="attachments/LangGraph_ReAct_example.png" width="400">
 Node "llm" calls OpenAI LLM, node "action" executes the action the LLM chose, if it chose one.
 
 Code example: [[Lesson_2_Student.py|Lesson_2_Student.py]]
 
 Output of `Image(abot.graph.get_graph().draw_png())`:
-![[LangGraph_getGraphDrawPNG.png]]
+![LangGraph_getGraphDrawPNG.png](attachments/LangGraph_getGraphDrawPNG.png)
 
 ### 4 Agentic Search Tools
 
 #### 4.1 Why a search tool?
 
-![[LangGraph_WhyAgenticSearch.png|400]]
+<img src="attachments/LangGraph_WhyAgenticSearch.png" width="400">
 Parametric knowledge can be outdated, and cannot give a reference. 
 
 Using agentic search tool reduces hallucination and HCI friction
@@ -104,7 +104,7 @@ Using agentic search tool reduces hallucination and HCI friction
 #### 4.2 How is agentic search different?
 
 Example of a basic search tool implementation:
-![[LangGraph_InsideASearchTool.png|800]]
+<img src="attachments/LangGraph_InsideASearchTool.png" width="800">
 1. understand the question and divide it to sub-queries. This is important for handling complex queries.
 2. for each sub-query, find the best source, choosing from multiple integrations.
 	* e.g. for the query "How is the weather in SF", the weather API should be used
@@ -173,7 +173,7 @@ Tavily yields:
 this is exactly what an agent wants to see.
 
 In contrast, this is what a human wants to see:
-![[LangGraph_SearchResultAsAHumanWantsIt.png|600]]
+<img src="attachments/LangGraph_SearchResultAsAHumanWantsIt.png" width="600">
 
 ### 5 Persistence and Streaming
 
@@ -234,10 +234,10 @@ Code example: [[Lesson_5_Student.py|Lesson_5_Student.py]]
 #### 5.1 State memory
 
 As the graph is being executed, a snapshot of each state is executed in memory:
-![[LangGraph_StateMemory_0.png|250]]![[LangGraph_StateMemory_1.png|250]]![[LangGraph_StateMemory_2.png|250]]![[LangGraph_StateMemory_3.png|250]]
+<img src="attachments/LangGraph_StateMemory_0.png" width="250"><img src="attachments/LangGraph_StateMemory_1.png" width="250"><img src="attachments/LangGraph_StateMemory_2.png" width="250"><img src="attachments/LangGraph_StateMemory_3.png" width="250">
 
 What's in the `StateSnapshot`:
-![[LangGraph_StateSnapshot.png|500]]
+<img src="attachments/LangGraph_StateSnapshot.png" width="500">
 * the `AgentState`, as defined in our code
 * the `thread` config (see code), consisting of 
 	* `thread_id` to identify the thread
@@ -247,14 +247,14 @@ Commands to access the memory:
 * `graph.get_state({"configurable": {"thread_id": "42"}})` (see code): returns the current state
 * `graph.get_state_history({"configurable": {"thread_id": "42"}})`: returns iterator over all `StateSnapshot`s
 * `graph.invoke(None, {"configurable": {"thread_id": "42", "thread_ts": ...}})` or `graph.stream(None, {"configurable": {"thread_id": "42", "thread_ts": ...}})` runs with that snapshot as starting point. This is time travel:
-![[LangGraph_TimeTravel.png|400]]
+<img src="attachments/LangGraph_TimeTravel.png" width="400">
 as opposed to 
-![[LangGraph_noTimeTravel.png|400]]
+<img src="attachments/LangGraph_noTimeTravel.png" width="400">
 * `graph.get_state({"configurable": {"thread_id": "42", "thread_ts": ...}})`: returns `thread_ts` state snapshot `state1`
 
 #### 5.2 Modify state
 * you can modify that state snapshot `state1` to `state1m` and then call `graph.update_state({"thread_id": "42"}, state1m)` to store it back on top, as new current state. When you then run `stream` or `invoke`, `state1m` will be used as its starting point:
-![[LangGraph_UpdateState.png|500]]
+<img src="attachments/LangGraph_UpdateState.png" width="500">
 Code example [[Lesson_5_Student.py|Lesson_5_Student.py]] at `# Modify State:` shows how to modify the state of the graph in order to control what the agent does (report weather in Louisiana instead of LA).
 #### 5.3 Time Travel
 
@@ -299,7 +299,7 @@ Overall, we have seen a lot of advanced and complicated human-in-the-loop intera
 ##### 5.7.1 Build a small graph
 
 A tiny graph is very helpful for understanding and debugging.
-![[LangGraph_TinyGraph.png|100]]
+<img src="attachments/LangGraph_TinyGraph.png" width="100">
 ##### 5.7.2 Go back in time
 
 Call `graph.invoke(None, states[-3])` to go back in time with `states[-3]` as current_state. 
@@ -319,7 +319,7 @@ The `as_node` argument to `graph.update_state` specifies the writer, so that gra
 ### 6 Essay Writer
 
 Essay Writer is a compact version of an AI researcher:
-![[LangGraph_EssayWriter_Overview.png|800]]
+<img src="attachments/LangGraph_EssayWriter_Overview.png" width="800">
 * `plan`: generates a plan, once upfront.
 * `research_plan` does some research based on that plan, which involves calling Tavily and getting back some documents.
 * `generate` follows the plan using the documents from `research_plan` to write the essay.
@@ -336,20 +336,20 @@ Essay Writer is a compact version of an AI researcher:
 * `max_revisions` is used for the exit criterion.
 
 See code example [[Lesson_6_Student.py|Lesson_6_Student.py]]:
-![[LangGraph_EssayWriter_Graph_a.png|300]]
-![[LangGraph_EssayWriter_Graph_b.png|300]]
+<img src="attachments/LangGraph_EssayWriter_Graph_a.png" width="300">
+<img src="attachments/LangGraph_EssayWriter_Graph_b.png" width="300">
 
 Example memory contents early on (from the MemoryWriter GUI):
-![[LangGraph_EssayWriterGUI_Memory_example.png]]
+![LangGraph_EssayWriterGUI_Memory_example.png](attachments/LangGraph_EssayWriterGUI_Memory_example.png)
 Memory contents after UpdateState:
-![[LangGraph_EssayWriterGUI_Memory_example2_afterUpdateState.png]]
+![LangGraph_EssayWriterGUI_Memory_example2_afterUpdateState.png](attachments/LangGraph_EssayWriterGUI_Memory_example2_afterUpdateState.png)
 
 * [ ]  Loop back to `planner`, because on the start, without any documents, `planner` might have needed lots of guesses.
 
 ### 7 Langchain Resources
 
 python.langchain.com/docs/get_started/introduction:
-![[LangChain_ArchitectureOverview.png]]
+![LangChain_ArchitectureOverview.png](attachments/LangChain_ArchitectureOverview.png)
 * Tavily is part of LangChain-Community
 * LangChain OpenAI is a separate partner package
 * LangChain itself is more high-level, good entry points
@@ -376,14 +376,14 @@ smith.langchain.com/hub
 Agent flows we did not cover, but you should know about:
 
 #### 8.1 Multi-Agent
-![[LangGraph_MultiAgentArchitecture.png|900]]
+<img src="attachments/LangGraph_MultiAgentArchitecture.png" width="900">
 * **Multi-Agent Architecture**: when multiple agents work on the same shared state, i.e. passing the state around from one agent to the next
 * each agent can have their own tools
 * each agent can have an own loop inside them.
 
 #### 8.2 Supervisor
 
-![[LangGraph_Supervisor.png|800]]
+<img src="attachments/LangGraph_Supervisor.png" width="800">
 * Supervisor Agent is calling sub-agents
 * Supervisor determines input to the sub-agents
 * Sub-Agents can have different states inside them, they are a LangGraph each
@@ -391,7 +391,7 @@ Agent flows we did not cover, but you should know about:
 * good when you have a powerful LLM for the supervisor (planning requires a lot of intelligence)
 
 #### 8.3 Flow Engineering
-![[LangGraph_FlowEngineering.png|800]]
+<img src="attachments/LangGraph_FlowEngineering.png" width="800">
 * comes from an AlphaCodium paper where they achieve SotA coding performance
 * graphical like solution
 	* basically a pipeline
@@ -401,7 +401,7 @@ Agent flows we did not cover, but you should know about:
 
 #### 8.4 Plan and Execute Paradigm
 
-![[LangGraph_PlanAndExecute.png|800]]
+<img src="attachments/LangGraph_PlanAndExecute.png" width="800">
 * plan & execute style flow is common paradigm/pattern
 	1. plan upfront: steps that a sub-agent should do
 	2. execute that plan: do one plan step (i.e. sub-task) with a sub-agent, which can do iterations to achieve sub-task. Maybe you update plan during this iteration
@@ -409,7 +409,7 @@ Agent flows we did not cover, but you should know about:
 	4. respond to user or go back to step 2.
 
 #### 8.5 Language Agent Tree Search
-![[LangGraph_LanguageAgentTreeSearch.png]]
+![LangGraph_LanguageAgentTreeSearch.png](attachments/LangGraph_LanguageAgentTreeSearch.png)
 * based on https://arxiv.org/abs/2310.04406: Language Agent Tree Search Unifies Reasoning, Acting, And Planning in Language Models
 * tree search over the state of possible actions
 	1. select node
